@@ -192,6 +192,11 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
           )
         }
       })}
+      {isProcessing && (
+        <div className="max-w-[80%] rounded-xl px-4 py-2 text-sm self-start bg-secondary text-secondary-foreground">
+          <Loader2 className="animate-spin" />
+        </div>
+      )}
     </div>
   )
 
