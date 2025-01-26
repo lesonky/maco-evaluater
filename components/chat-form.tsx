@@ -105,12 +105,29 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
     updateExtractedInfo(getInitialExtractedInfo())
   }, [reload, setInput, setMessages, updateExtractedInfo, getInitialExtractedInfo])
 
-  const handleComplete = () => {
-    setShowConfetti(true)
-    setTimeout(() => {
-      setShowConfetti(false)
-      handleRestart()
-    }, 3000)
+  const handleComplete = async () => {
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(extractedInfo),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit data')
+      }
+
+      setShowConfetti(true)
+      setTimeout(() => {
+        setShowConfetti(false)
+        handleRestart()
+      }, 3000)
+    } catch (error) {
+      console.error('Error submitting data:', error)
+      // 可以在这里添加错误提示
+    }
   }
 
   const header = (
