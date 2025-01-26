@@ -11,11 +11,14 @@ import { RestartButton } from "@/components/restart-button"
 import { ConfettiEffect } from "@/components/confetti-effect"
 import { motion } from "framer-motion"
 import { ChatResponse } from "@/lib/types"
+import { useExtractedInfo, getInitialExtractedInfo } from "@/hooks/use-extracted-info"
+import { ExtractedInfoCard } from "@/components/extracted-info-card"
 
 export function ChatForm({ className, ...props }: React.ComponentProps<"form">) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
+  const { extractedInfo, updateExtractedInfo } = useExtractedInfo()
 
   const { messages, input, setInput, append, reload, setMessages, isLoading } = useChat({
     api: "/api/chat",
@@ -32,14 +35,10 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
           }
           try {
             const parsedResponse: ChatResponse = JSON.parse(result)
-            // console.log('Parsed response:', parsedResponse)
             setIsCompleted(parsedResponse.is_completed || false)
-            // console.log('Current messages:', messages)
-            // console.log('Setting new messages with:', {
-            //   id: `${Date.now()}-${Math.random()}`,
-            //   content: JSON.stringify(parsedResponse),
-            //   role: "assistant",
-            // })
+            if (parsedResponse.extracted_information) {
+              updateExtractedInfo(parsedResponse.extracted_information)
+            }
             setMessages(prevMessages => [...prevMessages, {
               id: `${Date.now()}-${Math.random()}`,
               content: JSON.stringify(parsedResponse),
@@ -47,8 +46,6 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
             }])
             console.log('Setting messages:', messages)
           } catch (error) {
-            // console.error("Failed to parse response:", error)
-            // console.log('Current messages on error:', messages)
             setMessages(prevMessages => [...prevMessages, {
               id: `${Date.now()}-${Math.random()}`,
               content: "I apologize, but I encountered an error processing the last message. Could you please try again?",
@@ -98,7 +95,8 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
     setIsCompleted(false)
     setShowConfetti(false)
     reload()
-  }, [reload, setInput, setMessages])
+    updateExtractedInfo(getInitialExtractedInfo())
+  }, [reload, setInput, setMessages, updateExtractedInfo, getInitialExtractedInfo])
 
   const handleComplete = () => {
     setShowConfetti(true)
@@ -193,72 +191,94 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
   )
 
   return (
-    <main
-      className={cn(
-        "ring-none mx-auto flex h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] w-full max-w-3xl flex-col items-stretch border-none",
-        className,
-      )}
-      {...props}
-    >
-      <div className="flex-1 content-center overflow-y-auto px-6 relative">
-        {messages.length ? messageList : header}
-      </div>
-      <div className="mx-6 mb-6 flex flex-col items-center">
-        {isCompleted && (
-          <div className="w-full text-center mb-4">
-            <p className="text-sm text-muted-foreground mb-2">We've collected all necessary information. Thank you!</p>
-            <Button onClick={handleComplete} className="bg-green-500 hover:bg-green-600 text-white">
-              <CheckCircle className="mr-2 h-4 w-4" /> Complete
-            </Button>
+    <div className="flex w-full h-[calc(100vh-4rem)]">
+      <ExtractedInfoCard
+        extractedInfo={extractedInfo}
+        className="h-full rounded-none border-r"
+      />
+      <main
+        className={cn(
+          "ring-none flex h-full w-full flex-col items-stretch border-none",
+          className,
+        )}
+        {...props}
+      >
+        <div className="flex-1 content-center overflow-y-auto px-6 relative">
+          {messages.length ? messageList : header}
+        </div>
+        <div className="mx-6 mb-6 flex flex-col items-center">
+          {isCompleted && (
+            <div className="w-full text-center mb-4">
+              <p className="text-sm text-muted-foreground mb-2">
+                我们已收集到所有必要信息，感谢您的配合！
+              </p>
+              <Button
+                onClick={handleComplete}
+                className="bg-green-500 hover:bg-green-600 text-white"
+              >
+                <CheckCircle className="mr-2 h-4 w-4" /> 完成
+              </Button>
+            </div>
+          )}
+          <div className="w-full flex items-center">
+            <motion.div
+              className="flex-1"
+              animate={
+                isCompleted
+                  ? {
+                      scale: [1, 1.02, 1],
+                      borderColor: ["#e2e8f0", "#22c55e", "#e2e8f0"],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 1,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "reverse",
+              }}
+            >
+              <form
+                onSubmit={handleSubmit}
+                className="border-input bg-background focus-within:ring-ring/10 relative flex items-center rounded-[16px] border px-3 py-1.5 pr-8 text-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-0"
+              >
+                <AutoResizeTextarea
+                  onKeyDown={handleKeyDown}
+                  onChange={(v) => setInput(v)}
+                  value={input}
+                  disabled={isProcessing || isLoading}
+                  placeholder="请描述您的业务需求或询问关于 Google 解决方案的问题..."
+                  className="placeholder:text-muted-foreground flex-1 bg-transparent focus:outline-none disabled:opacity-50"
+                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute bottom-1 right-1 size-6 rounded-full"
+                      disabled={isProcessing || isLoading}
+                    >
+                      {isProcessing || isLoading ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <ArrowUpIcon size={16} />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={12}>发送</TooltipContent>
+                </Tooltip>
+              </form>
+            </motion.div>
+            {messages.length > 0 && <RestartButton onClick={handleRestart} />}
+          </div>
+        </div>
+        {showConfetti && (
+          <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+            <ConfettiEffect />
           </div>
         )}
-        <div className="w-full flex items-center">
-          <motion.div
-            className="flex-1"
-            animate={isCompleted ? { scale: [1, 1.02, 1], borderColor: ["#e2e8f0", "#22c55e", "#e2e8f0"] } : {}}
-            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-          >
-            <form
-              onSubmit={handleSubmit}
-              className="border-input bg-background focus-within:ring-ring/10 relative flex items-center rounded-[16px] border px-3 py-1.5 pr-8 text-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-0"
-            >
-              <AutoResizeTextarea
-                onKeyDown={handleKeyDown}
-                onChange={(v) => setInput(v)}
-                value={input}
-                disabled={isProcessing || isLoading}
-                placeholder="请描述您的业务需求或询问关于 Google 解决方案的问题..."
-                className="placeholder:text-muted-foreground flex-1 bg-transparent focus:outline-none disabled:opacity-50"
-              />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="submit"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute bottom-1 right-1 size-6 rounded-full"
-                    disabled={isProcessing || isLoading}
-                  >
-                    {isProcessing || isLoading ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : (
-                      <ArrowUpIcon size={16} />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={12}>Submit</TooltipContent>
-              </Tooltip>
-            </form>
-          </motion.div>
-          {messages.length > 0 && <RestartButton onClick={handleRestart} />}
-        </div>
-      </div>
-      {showConfetti && (
-        <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
-          <ConfettiEffect />
-        </div>
-      )}
-    </main>
+      </main>
+    </div>
   )
 }
 
