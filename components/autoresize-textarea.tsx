@@ -36,7 +36,6 @@ export const AutoResizeTextarea = forwardRef<AutoResizeTextareaRef, AutoResizeTe
 
     return (
       <textarea
-        {...props}
         value={value}
         ref={textareaRef}
         rows={1}
@@ -45,6 +44,7 @@ export const AutoResizeTextarea = forwardRef<AutoResizeTextareaRef, AutoResizeTe
           resizeTextarea()
         }}
         className={cn("resize-none min-h-4 max-h-80", className)}
+        {...props}
       />
     )
   }

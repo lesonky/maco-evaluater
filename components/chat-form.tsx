@@ -13,6 +13,7 @@ import { motion } from "framer-motion"
 import { ChatResponse } from "@/lib/types"
 import { useExtractedInfo, getInitialExtractedInfo } from "@/hooks/use-extracted-info"
 import { ExtractedInfoCard } from "@/components/extracted-info-card"
+import Image from "next/image"
 
 export function ChatForm({ className, ...props }: React.ComponentProps<"form">) {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -123,7 +124,13 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="flex flex-col items-center">
-              <MapPin size={32} className="text-blue-500" />
+              <Image
+                src="/gmp_logo.png"
+                alt="Google Maps Platform"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
               <span className="mt-2 text-sm font-medium">Maps Platform</span>
             </div>
           </TooltipTrigger>
@@ -134,7 +141,13 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="flex flex-col items-center">
-              <Cloud size={32} className="text-green-500" />
+              <Image
+                src="/gcp_logo.png"
+                alt="Google Cloud"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
               <span className="mt-2 text-sm font-medium">Cloud</span>
             </div>
           </TooltipTrigger>
@@ -145,7 +158,13 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="flex flex-col items-center">
-              <Briefcase size={32} className="text-yellow-500" />
+              <Image
+                src="/gws_logo.png"
+                alt="Google Workspace"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
               <span className="mt-2 text-sm font-medium">Workspace</span>
             </div>
           </TooltipTrigger>
@@ -259,6 +278,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                   disabled={isProcessing || isLoading}
                   placeholder="请描述您的业务需求或询问关于 Google 解决方案的问题..."
                   className="placeholder:text-muted-foreground flex-1 bg-transparent focus:outline-none disabled:opacity-50"
+                  rows={3}
                 />
                 <Tooltip>
                   <TooltipTrigger asChild>
