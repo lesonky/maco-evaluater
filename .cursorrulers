@@ -1,0 +1,84 @@
+# Instructions
+
+During your interaction, if you identify any reusable insights (e.g., a solution to a recurring issue, a clarification on a misunderstanding), especially about a fix to a mistake you made or a correction you received, record these in the `Lessons` section below. This helps you avoid repeating errors and allows the prompt to evolve with ongoing conversations.
+
+For each new task:
+1. Clear the current content in the `Scratchpad` section below.
+2. Explain the new task and outline the steps needed to complete it within the `Scratchpad`.
+3. Use markers (e.g., `[X]` for done, `[ ]` for pending) to track progress on each step *within the `Scratchpad`*.
+4. Update the progress markers in the `Scratchpad` as you finish subtasks.
+5. When reaching a significant point or a milestone, use the `Scratchpad` to reflect on completed steps and plan the next ones.
+
+This approach helps maintain a clear overview of the task and facilitates tracking progress. Always consult the `Scratchpad` when planning subsequent steps.
+
+# Lessons
+
+## Project Management
+
+- Always use English for recording lessons and experiences in .cursorrulers file.
+- Check git status before starting new feature development. If there are uncommitted changes, commit them first.
+- Create meaningful commit messages that clearly describe the changes and their purpose.
+- Use feature branches for new development to keep the main branch stable.
+- Regularly update project documentation when making significant changes.
+
+## Development Best Practices
+
+- During project initialization, analyze and document key dependencies and tools.
+- If any API usage is uncertain, remind to reference the official documentation.
+- Make sure to read file contents before editing to maintain context and prevent errors.
+- Include comprehensive error handling and logging in production code.
+- Follow consistent code formatting and naming conventions across the project.
+- Write self-documenting code with clear variable and function names.
+
+## Testing and Quality Assurance
+
+- When performing text related tasks with LLM, always test on a few samples before scaling up.
+- Include information useful for debugging in the program output.
+- Add context information in debug logs for better troubleshooting.
+- Write and maintain unit tests for critical functionality.
+- Test edge cases and error scenarios thoroughly.
+
+## Security and Performance
+
+- Never commit sensitive information (API keys, credentials) to version control.
+- Use environment variables for configuration that varies between environments.
+- Implement proper input validation and sanitization.
+- Optimize resource-intensive operations and database queries.
+- Regularly audit and update dependencies for security patches.
+
+## Frontend Development
+
+- Ensure responsive design works across different screen sizes.
+- Implement proper loading states and error boundaries.
+- Follow accessibility best practices (WCAG guidelines).
+- Optimize images and assets for web performance.
+- Use semantic HTML elements appropriately.
+
+## Backend Development
+
+- Implement proper API versioning and documentation.
+- Use appropriate HTTP status codes and error responses.
+- Implement rate limiting and security headers.
+- Cache expensive operations where appropriate.
+- Follow RESTful API design principles.
+
+## DevOps and Deployment
+
+- Maintain separate configurations for development and production.
+- Document deployment procedures and requirements.
+- Set up proper logging and monitoring in production.
+- Implement automated CI/CD pipelines.
+- Have a rollback strategy for failed deployments.
+
+## Cursor Learned
+
+- Ensure image paths are correctly relative (e.g., 'images/filename.png') and the image directory exists.
+- Make sure to handle character encodings (especially UTF-8) properly for text processing tasks.
+- Send debug details to stderr and keep the main output clean in stdout for better pipeline integration.
+- Make sure to use correct version identifier when referencing versions of libraries or tools.
+- Avoid mixing different output formats (e.g., JSON and CSV) to prevent confusions.
+- Keep dependencies up to date while ensuring compatibility.
+- Document any workarounds or special configurations needed.
+- Always use English for recording lessons and experiences in .cursorrulers file.
+
+# Scratchpad
