@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { Message, useChat } from "ai/react"
 import { ArrowUpIcon, CheckCircle, MapPin, Cloud, Briefcase, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { AutoResizeTextarea } from "@/components/autoresize-textarea"
+import { AutoResizeTextarea, AutoResizeTextareaRef } from "@/components/autoresize-textarea"
 import { RestartButton } from "@/components/restart-button"
 import { ConfettiEffect } from "@/components/confetti-effect"
 import { motion } from "framer-motion"
@@ -19,6 +19,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
   const [isCompleted, setIsCompleted] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
   const { extractedInfo, updateExtractedInfo } = useExtractedInfo()
+  const textareaRef = useRef<AutoResizeTextareaRef>(null)
 
   const { messages, input, setInput, append, reload, setMessages, isLoading } = useChat({
     api: "/api/chat",
@@ -45,14 +46,18 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
               role: "assistant",
             }])
             console.log('Setting messages:', messages)
+            setIsProcessing(false)
+            setTimeout(() => {
+              textareaRef.current?.focus()
+            }, 100)
           } catch (error) {
             setMessages(prevMessages => [...prevMessages, {
               id: `${Date.now()}-${Math.random()}`,
               content: "I apologize, but I encountered an error processing the last message. Could you please try again?",
               role: "assistant",
             }])
+            setIsProcessing(false)
           }
-          setIsProcessing(false)
         }
         resolve()
       })
@@ -242,6 +247,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                 className="border-input bg-background focus-within:ring-ring/10 relative flex items-center rounded-[16px] border px-3 py-1.5 pr-8 text-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-0"
               >
                 <AutoResizeTextarea
+                  ref={textareaRef}
                   onKeyDown={handleKeyDown}
                   onChange={(v) => setInput(v)}
                   value={input}
