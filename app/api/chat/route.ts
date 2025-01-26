@@ -1,13 +1,21 @@
 import { type CoreMessage, generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
+// import { openai } from "@ai-sdk/openai"
+import { vertex,createVertex } from "@ai-sdk/google-vertex"
 import { NextResponse } from "next/server"
+
+
+const removeMarkdownCodeBlock = (text: string) => {
+  return text.replace(/```[a-z]*\n([\s\S]*)\n```/g, (match, p1) => {
+    return p1.replace(/```/g, '')
+  })
+}
 
 export async function POST(req: Request) {
   const { messages }: { messages: CoreMessage[] } = await req.json()
 
   try {
     const result = await generateText({
-      model: openai("gpt-4o-mini"),
+      model: vertex("gemini-2.0-flash-exp"),
       system: `<prompt>
     <description>
         You are an AI assistant tasked with evaluating user needs and potential for adopting Google products:
@@ -101,11 +109,13 @@ export async function POST(req: Request) {
       temperature: 0.7,
       maxTokens: 1000,
     })
-
-    return NextResponse.json(JSON.parse(result.text))
+    console.log(result.text)
+    return NextResponse.json(JSON.parse(removeMarkdownCodeBlock(result.text)))
   } catch (error) {
     console.error("Error in chat API:", error)
     return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 })
   }
 }
+
+
 

@@ -142,12 +142,36 @@ maco-evaluater/
 
 ### 环境变量
 
-创建 `.env.local` 文件：
+创建 `.env.local` 文件并配置以下环境变量：
 
 ```env
-NEXT_PUBLIC_API_URL=your_api_url
-# 添加其他必要的环境变量
+# OpenAI API 密钥
+OPENAI_API_KEY=your_openai_api_key
+
+# Google Cloud 服务配置
+GOOGLE_APPLICATION_CREDENTIALS=./vertex_service_account.json  # Google Cloud 服务账号凭证文件路径
+GOOGLE_VERTEX_LOCATION=your_vertex_location                  # Google Vertex AI 服务区域（如：us-central1）
+GOOGLE_VERTEX_PROJECT=your_project_id                       # Google Cloud 项目 ID
 ```
+
+#### 环境变量说明
+
+- **OPENAI_API_KEY**: OpenAI API 密钥，用于访问 OpenAI 的服务
+- **GOOGLE_APPLICATION_CREDENTIALS**: Google Cloud 服务账号凭证文件的路径，用于认证 Google Cloud 服务
+- **GOOGLE_VERTEX_LOCATION**: Google Vertex AI 服务的地理位置，指定服务部署的区域
+- **GOOGLE_VERTEX_PROJECT**: Google Cloud 项目的唯一标识符
+
+#### 获取环境变量值
+
+1. OpenAI API 密钥
+   - 访问 [OpenAI 平台](https://platform.openai.com/)
+   - 在开发者设置中创建 API 密钥
+
+2. Google Cloud 配置
+   - 在 [Google Cloud Console](https://console.cloud.google.com/) 创建项目
+   - 启用 Vertex AI API
+   - 创建服务账号并下载凭证文件（JSON 格式）
+   - 将凭证文件重命名为 `vertex_service_account.json` 并放置在项目根目录
 
 ### 开发工具配置
 
