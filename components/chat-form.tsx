@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { cn } from "@/lib/utils"
-import { useChat } from "ai/react"
+import { Message, useChat } from "ai/react"
 import { ArrowUpIcon, CheckCircle, MapPin, Cloud, Briefcase, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -10,20 +10,12 @@ import { AutoResizeTextarea } from "@/components/autoresize-textarea"
 import { RestartButton } from "@/components/restart-button"
 import { ConfettiEffect } from "@/components/confetti-effect"
 import { motion } from "framer-motion"
-
-interface ChatResponse {
-  next_question: string
-  response: string
-  extracted_information: any
-  is_completed: boolean
-}
+import { ChatResponse } from "@/lib/types"
 
 export function ChatForm({ className, ...props }: React.ComponentProps<"form">) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
-  // Removed nextQuestion state
-  //const [nextQuestion, setNextQuestion] = useState<string | null>(null)
 
   const { messages, input, setInput, append, reload, setMessages, isLoading } = useChat({
     api: "/api/chat",
@@ -40,20 +32,28 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
           }
           try {
             const parsedResponse: ChatResponse = JSON.parse(result)
-            // Removed setNextQuestion
-            //setNextQuestion(parsedResponse.next_question || null)
+            // console.log('Parsed response:', parsedResponse)
             setIsCompleted(parsedResponse.is_completed || false)
-            append({
+            // console.log('Current messages:', messages)
+            // console.log('Setting new messages with:', {
+            //   id: `${Date.now()}-${Math.random()}`,
+            //   content: JSON.stringify(parsedResponse),
+            //   role: "assistant",
+            // })
+            setMessages(prevMessages => [...prevMessages, {
+              id: `${Date.now()}-${Math.random()}`,
               content: JSON.stringify(parsedResponse),
               role: "assistant",
-            })
+            }])
+            console.log('Setting messages:', messages)
           } catch (error) {
-            console.error("Failed to parse response:", error)
-            append({
-              content:
-                "I apologize, but I encountered an error processing the last message. Could you please try again?",
+            // console.error("Failed to parse response:", error)
+            // console.log('Current messages on error:', messages)
+            setMessages(prevMessages => [...prevMessages, {
+              id: `${Date.now()}-${Math.random()}`,
+              content: "I apologize, but I encountered an error processing the last message. Could you please try again?",
               role: "assistant",
-            })
+            }])
           }
           setIsProcessing(false)
         }
@@ -69,9 +69,15 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
     e.preventDefault()
     if (input.trim() && !isProcessing && !isLoading) {
       setIsProcessing(true)
+      const message = input
+      setInput("")
       try {
-        await append({ content: input, role: "user" })
-        setInput("")
+        const userMessage = {
+          id: `${Date.now()}-${Math.random()}`,
+          content: message,
+          role: "user" as const
+        }
+        await append(userMessage)
       } catch (error) {
         console.error("Error submitting message:", error)
       }
@@ -91,7 +97,6 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
     setIsProcessing(false)
     setIsCompleted(false)
     setShowConfetti(false)
-    //setNextQuestion(null) // Removed
     reload()
   }, [reload, setInput, setMessages])
 
