@@ -1,5 +1,5 @@
 export const GOOGLE_LOGOS = {
-  cloud: "/images/google-cloud.svg",
-  maps: "/images/google-maps.svg",
-  workspace: "/images/google-workspace.svg",
+  cloud: "/images/gcp_logo.png",
+  maps: "/images/gmp_logo.png",
+  workspace: "/images/Logo_google_workspace.original.png",
 } 

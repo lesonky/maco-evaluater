@@ -128,9 +128,9 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
               <Image
                 src={GOOGLE_LOGOS.maps}
                 alt="Google Maps Platform"
-                width={150}
-                height={150}
-                className="h-12 w-auto object-contain"
+                width={100}
+                height={100}
+                className="h-8 w-auto object-contain"
                 priority
               />
               <span className="mt-2 text-sm font-medium">Maps Platform</span>
@@ -146,9 +146,9 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
               <Image
                 src={GOOGLE_LOGOS.cloud}
                 alt="Google Cloud"
-                width={150}
-                height={150}
-                className="h-12 w-auto object-contain"
+                width={100}
+                height={100}
+                className="h-8 w-auto object-contain"
                 priority
               />
               <span className="mt-2 text-sm font-medium">Cloud</span>
@@ -164,9 +164,9 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
               <Image
                 src={GOOGLE_LOGOS.workspace}
                 alt="Google Workspace"
-                width={150}
-                height={150}
-                className="h-12 w-auto object-contain"
+                width={100}
+                height={100}
+                className="h-8 w-auto object-contain"
                 priority
               />
               <span className="mt-2 text-sm font-medium">Workspace</span>
