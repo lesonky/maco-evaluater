@@ -121,7 +121,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
       <p className="text-muted-foreground text-lg">
         Discover how Google's enterprise solutions can transform your business
       </p>
-      <div className="flex justify-center space-x-8">
+      <div className="flex justify-center items-center space-x-12">
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="flex flex-col items-center">
@@ -133,7 +133,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                 className="h-8 w-auto object-contain"
                 priority
               />
-              <span className="mt-2 text-sm font-medium">Maps Platform</span>
+              <span className="mt-2 text-sm font-medium">Google Maps Platform</span>
             </div>
           </TooltipTrigger>
           <TooltipContent>
@@ -151,7 +151,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                 className="h-8 w-auto object-contain"
                 priority
               />
-              <span className="mt-2 text-sm font-medium">Cloud</span>
+              <span className="mt-2 text-sm font-medium">Google Cloud</span>
             </div>
           </TooltipTrigger>
           <TooltipContent>
@@ -164,9 +164,9 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
               <Image
                 src={GOOGLE_LOGOS.workspace}
                 alt="Google Workspace"
-                width={100}
+                width={140}
                 height={100}
-                className="h-8 w-auto object-contain"
+                className="h-10 w-auto object-contain"
                 priority
               />
               <span className="mt-2 text-sm font-medium">Workspace</span>
