@@ -20,6 +20,8 @@ This approach helps maintain a clear overview of the task and facilitates tracki
 - Create meaningful commit messages that clearly describe the changes and their purpose.
 - Use feature branches for new development to keep the main branch stable.
 - Regularly update project documentation when making significant changes.
+- NEVER commit changes without explicit user approval, even if the changes seem correct.
+- Test new features thoroughly before suggesting a commit.
 
 ## Development Best Practices
 
