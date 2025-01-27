@@ -15,6 +15,7 @@ import { useExtractedInfo, getInitialExtractedInfo } from "@/hooks/use-extracted
 import { ExtractedInfoCard } from "@/components/extracted-info-card"
 import Image from "next/image"
 import { GOOGLE_LOGOS } from "@/public/google-logos"
+import { toast } from "sonner"
 
 export function ChatForm({ className, ...props }: React.ComponentProps<"form">) {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -119,6 +120,10 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
         throw new Error('Failed to submit data')
       }
 
+      toast.success('您的信息已成功提交！', {
+        description: '我们会尽快与您联系。',
+      })
+
       setShowConfetti(true)
       setTimeout(() => {
         setShowConfetti(false)
@@ -126,7 +131,9 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
       }, 3000)
     } catch (error) {
       console.error('Error submitting data:', error)
-      // 可以在这里添加错误提示
+      toast.error('提交失败', {
+        description: '请稍后重试或联系客服。',
+      })
     }
   }
 
@@ -289,7 +296,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
             >
               <form
                 onSubmit={handleSubmit}
-                className="border-input bg-background focus-within:ring-ring/10 relative flex items-center rounded-[16px] border px-3 py-1.5 pr-8 text-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-0"
+                className="relative flex items-center rounded-[16px] border border-zinc-700 bg-zinc-900/50 px-3 py-1.5 pr-8 text-sm shadow-lg ring-1 ring-zinc-700/50 transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-900/70 focus-within:border-zinc-500 focus-within:ring-2 focus-within:ring-zinc-500/50"
               >
                 <AutoResizeTextarea
                   ref={textareaRef}
@@ -299,7 +306,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                   disabled={isProcessing || isLoading}
                   placeholder="请描述您的业务需求或询问关于 Google 解决方案的问题..."
                   className="placeholder:text-muted-foreground flex-1 bg-transparent focus:outline-none disabled:opacity-50"
-                  rows={3}
+                  rows={5}
                 />
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -307,7 +314,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                       type="submit"
                       variant="ghost"
                       size="sm"
-                      className="absolute bottom-1 right-1 size-6 rounded-full"
+                      className="absolute bottom-1 right-1 size-6 rounded-full hover:bg-zinc-800"
                       disabled={isProcessing || isLoading}
                     >
                       {isProcessing || isLoading ? (

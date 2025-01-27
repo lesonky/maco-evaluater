@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils"
+import "./globals.css"
+import { Inter, Orbitron } from "next/font/google"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { Inter } from "next/font/google"
-import { Orbitron } from "next/font/google"
-import type { ReactNode } from "react"
-import Script from "next/script"
+import { cn } from "@/lib/utils"
 
 const inter = Inter({ subsets: ["latin"] })
 const orbitron = Orbitron({ subsets: ["latin"] })
@@ -13,18 +13,30 @@ export const metadata = {
   description: "AI-powered assistant for evaluating Google enterprise solutions.",
 }
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn("flex min-h-svh flex-col antialiased", inter.className)}>
         <header className="w-full bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-center">
-          <h1 className={cn("text-4xl font-bold text-white", orbitron.className)}>Maco Evaluater</h1>
+          <h1 className={cn("text-4xl font-bold text-white", orbitron.className)}>
+            Maco Evaluater
+          </h1>
         </header>
-        <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
-        <Script
-          src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"
-          strategy="beforeInteractive"
-        />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <TooltipProvider>
+            {children}
+            <Toaster richColors position="top-center" />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -121,80 +121,64 @@ yarn start
 pnpm start
 ```
 
+## 🚀 部署到 Google Cloud Run
+
+### 前置条件
+
+1. 安装 [Google Cloud CLI](https://cloud.google.com/sdk/docs/install)
+2. 配置 Google Cloud 项目和认证：
+```bash
+# 登录 Google Cloud
+gcloud auth login
+
+# 设置项目 ID
+gcloud config set project YOUR_PROJECT_ID
+
+# 启用必要的 API
+gcloud services enable run.googleapis.com
+```
+
+### 部署步骤
+
+1. 构建 Docker 镜像并推送到 Google Container Registry：
+```bash
+# 构建镜像
+docker build -t gcr.io/YOUR_PROJECT_ID/maco-evaluater .
+
+# 推送镜像到 GCR
+docker push gcr.io/YOUR_PROJECT_ID/maco-evaluater
+```
+
+2. 部署到 Cloud Run：
+```bash
+gcloud run deploy maco-evaluater \
+  --image gcr.io/YOUR_PROJECT_ID/maco-evaluater \
+  --platform managed \
+  --region asia-east1 \
+  --allow-unauthenticated \
+  --set-env-vars="GOOGLE_VERTEX_LOCATION=your_vertex_location,GOOGLE_VERTEX_PROJECT=your_project_id"
+```
+
+### 环境变量配置
+
+在 Cloud Run 控制台中配置以下环境变量：
+- `GOOGLE_VERTEX_LOCATION`: Vertex AI 服务区域
+- `GOOGLE_VERTEX_PROJECT`: Google Cloud 项目 ID
+
+注意：对于 `GOOGLE_APPLICATION_CREDENTIALS`，Cloud Run 会自动处理服务账号认证，无需手动配置。
+
+### 更新部署
+
+当需要更新应用时，重复以上步骤 1-2 即可。新版本将自动部署并替换旧版本。
+
+### 监控和日志
+
+- 访问 [Cloud Run 控制台](https://console.cloud.google.com/run) 查看部署状态和监控指标
+- 使用以下命令查看应用日志：
+```bash
+gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=maco-evaluater" --limit 50
+```
+
 ## 📁 项目结构
 
 ```
-maco-evaluater/
-├── app/                # Next.js 应用主目录
-│   ├── api/           # API 路由
-│   ├── layout.tsx     # 根布局
-│   └── page.tsx       # 主页面
-├── components/        # React 组件
-│   ├── ui/           # 基础 UI 组件
-│   └── shared/       # 共享组件
-├── hooks/            # 自定义 React Hooks
-├── lib/              # 工具函数和配置
-├── public/           # 静态资源
-└── styles/           # 全局样式
-```
-
-## 🔧 配置
-
-### 环境变量
-
-创建 `.env.local` 文件并配置以下环境变量：
-
-```env
-# OpenAI API 密钥
-OPENAI_API_KEY=your_openai_api_key
-
-# Google Cloud 服务配置
-GOOGLE_APPLICATION_CREDENTIALS=./vertex_service_account.json  # Google Cloud 服务账号凭证文件路径
-GOOGLE_VERTEX_LOCATION=your_vertex_location                  # Google Vertex AI 服务区域（如：us-central1）
-GOOGLE_VERTEX_PROJECT=your_project_id                       # Google Cloud 项目 ID
-```
-
-#### 环境变量说明
-
-- **OPENAI_API_KEY**: OpenAI API 密钥，用于访问 OpenAI 的服务
-- **GOOGLE_APPLICATION_CREDENTIALS**: Google Cloud 服务账号凭证文件的路径，用于认证 Google Cloud 服务
-- **GOOGLE_VERTEX_LOCATION**: Google Vertex AI 服务的地理位置，指定服务部署的区域
-- **GOOGLE_VERTEX_PROJECT**: Google Cloud 项目的唯一标识符
-
-#### 获取环境变量值
-
-1. OpenAI API 密钥
-   - 访问 [OpenAI 平台](https://platform.openai.com/)
-   - 在开发者设置中创建 API 密钥
-
-2. Google Cloud 配置
-   - 在 [Google Cloud Console](https://console.cloud.google.com/) 创建项目
-   - 启用 Vertex AI API
-   - 创建服务账号并下载凭证文件（JSON 格式）
-   - 将凭证文件重命名为 `vertex_service_account.json` 并放置在项目根目录
-
-### 开发工具配置
-
-- ESLint 配置已包含在项目中
-- Prettier 配置可根据团队规范调整
-- TypeScript 配置在 `tsconfig.json` 中
-
-## 📝 开发规范
-
-- 使用 TypeScript 进行类型检查
-- 遵循 ESLint 规则进行代码格式化
-- 使用 Tailwind CSS 进行样式管理
-- 组件采用原子化设计
-- 提交代码前运行测试和类型检查
-
-## 🤝 贡献指南
-
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
-## 📄 许可证
-
-本项目采用 [MIT](LICENSE) 许可证。 

@@ -75,26 +75,26 @@ export async function POST(req: Request) {
                 <field name="existing_office_collaboration_tools" type="string" priority="P1" />
                 <field name="existing_data_analytics_ml_platforms" type="string" priority="P1" />
                 <field name="existing_website_app_hosting_solutions" type="string" priority="P1" />
-                 <field name="existing_crm_system" type="string" priority="P2" />
+                <field name="existing_crm_system" type="string" priority="P2" />
               </field>
               <field name="business_challenges_and_needs" type="object">
                 <field name="location_related_business_needs" type="string" priority="P1" />
                 <field name="cloud_service_related_business_needs" type="string" priority="P1" />
                 <field name="office_collaboration_needs" type="string" priority="P1" />
-                  <field name="data_analytics_utilization_challenges" type="string" priority="P1" />
+                <field name="data_analytics_utilization_challenges" type="string" priority="P1" />
                 <field name="business_growth_expansion_plans" type="string" priority="P1" />
               </field>
                 <field name="google_product_awareness_interest" type="object">
                     <field name="aware_of_google_maps_platform" type="string" priority="P1" />
-                     <field name="considered_google_cloud" type="string" priority="P1" />
+                    <field name="considered_google_cloud" type="string" priority="P1" />
                     <field name="seeking_new_office_collaboration_solution" type="string" priority="P1" />
-                     <field name="interested_google_products_features" type="string" priority="P1" />
+                    <field name="interested_google_products_features" type="string" priority="P1" />
                 </field>
               <field name="contact_information" type="object">
                 <field name="contact_person_name" type="string" priority="P0" />
                 <field name="contact_person_title" type="string" priority="P1" />
                 <field name="contact_person_email" type="string" priority="P0" />
-                  <field name="contact_person_phone" type="string" priority="P1" />
+                <field name="contact_person_phone" type="string" priority="P1" />
               </field>
             </field>
               <field name="is_completed" type="boolean" required="true">Mark is_completed as true only when all P0 fields are filled</field>
