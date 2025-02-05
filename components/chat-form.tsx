@@ -223,7 +223,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
           return (
             <div
               key={index}
-              className="max-w-[80%] rounded-xl px-4 py-2 text-sm self-start bg-secondary text-secondary-foreground"
+              className="max-w-[80%] rounded-xl px-4 py-2 text-sm self-start bg-muted text-muted-foreground"
             >
               {content}
             </div>
@@ -240,7 +240,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
         }
       })}
       {isProcessing && (
-        <div className="max-w-[80%] rounded-xl px-4 py-2 text-sm self-start bg-secondary text-secondary-foreground">
+        <div className="max-w-[80%] rounded-xl px-4 py-2 text-sm self-start bg-muted text-muted-foreground">
           <Loader2 className="animate-spin" />
         </div>
       )}
@@ -296,7 +296,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
             >
               <form
                 onSubmit={handleSubmit}
-                className="relative flex items-center rounded-[16px] border border-zinc-700 bg-zinc-900/50 px-3 py-1.5 pr-8 text-sm shadow-lg ring-1 ring-zinc-700/50 transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-900/70 focus-within:border-zinc-500 focus-within:ring-2 focus-within:ring-zinc-500/50"
+                className="relative flex items-center rounded-[16px] border bg-background px-3 py-1.5 pr-8 text-sm shadow-lg ring-1 ring-input transition-all duration-200 hover:border-input hover:bg-background focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/50"
               >
                 <AutoResizeTextarea
                   ref={textareaRef}
@@ -314,7 +314,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<"form">) 
                       type="submit"
                       variant="ghost"
                       size="sm"
-                      className="absolute bottom-1 right-1 size-6 rounded-full hover:bg-zinc-800"
+                      className="absolute bottom-1 right-1 size-6 rounded-full hover:bg-muted"
                       disabled={isProcessing || isLoading}
                     >
                       {isProcessing || isLoading ? (

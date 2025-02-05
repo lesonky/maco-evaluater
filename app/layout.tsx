@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const inter = Inter({ subsets: ["latin"] })
 const orbitron = Orbitron({ subsets: ["latin"] })
@@ -21,17 +22,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("flex min-h-svh flex-col antialiased", inter.className)}>
-        <header className="w-full bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-center">
-          <h1 className={cn("text-4xl font-bold text-white", orbitron.className)}>
-            Maco Evaluater
-          </h1>
-        </header>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
+          defaultTheme="system"
+          enableSystem
           disableTransitionOnChange
         >
+          <header className="w-full bg-gradient-to-r from-blue-500 to-purple-600 p-4 flex justify-between items-center">
+            <h1 className={cn("text-4xl font-bold text-white", orbitron.className)}>
+              Maco Evaluater
+            </h1>
+            <ThemeToggle />
+          </header>
           <TooltipProvider>
             {children}
             <Toaster richColors position="top-center" />
